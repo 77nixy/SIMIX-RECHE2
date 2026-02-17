@@ -1,0 +1,1169 @@
+/*
+===============================================================================
+ GameZone — style.css
+===============================================================================
+
+Este archivo contiene TODOS los estilos visuales:
+- Variables de tema (colores, sombras, radios, tiempos…)
+- Reset y base tipográfica
+- Layout (contenedores, grids)
+- Componentes (botones, cards, badges, modales, tablas…)
+- Secciones (hero, juegos, comentarios, admin…)
+- Animaciones (reveal, blobs, shimmer…)
+
+Nota:
+- El modo oscuro/claro se controla con: <html data-theme="dark|light">
+===============================================================================
+*/
+
+/* =============================================================================
+   1) VARIABLES (TOKENS DE DISEÑO)
+   - Cambiando estas variables, cambia el look del sitio entero.
+============================================================================= */
+:root{
+  /* Tipografía */
+  --font: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+
+  /* Tamaños */
+  --container: 1120px;
+  --radius: 18px;
+  --radius-sm: 14px;
+  --blur: 16px;
+
+  /* Colores (modo oscuro) */
+  --bg0: #070813;
+  --bg1: #0a1226;
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.68);
+  --border: rgba(255,255,255,.12);
+
+  /* Marca / acentos */
+  --brand:  #8a5cff;  /* morado */
+  --brand2: #22c1c3;  /* turquesa */
+  --brand3: #ff4d6d;  /* rosa */
+
+  /* Superficies */
+  --card:  rgba(255,255,255,.06);
+  --card2: rgba(255,255,255,.10);
+
+  /* Sombras */
+  --shadow: 0 22px 70px rgba(0,0,0,.45);
+  --shadow-soft: 0 18px 40px rgba(0,0,0,.22);
+
+  /* Tiempos (animaciones) */
+  --t-fast: 140ms;
+  --t-med: 260ms;
+  --t-slow: 750ms;
+}
+
+/* =============================================================================
+   2) MODO CLARO
+============================================================================= */
+html[data-theme="light"]{
+  --bg0: #f6f7fb;
+  --bg1: #e8ecf7;
+  --text: rgba(12,14,20,.92);
+  --muted: rgba(12,14,20,.62);
+  --border: rgba(12,14,20,.12);
+
+  --card: rgba(255,255,255,.70);
+  --card2: rgba(255,255,255,.88);
+
+  --shadow: 0 22px 70px rgba(12,14,20,.12);
+  --shadow-soft: 0 18px 40px rgba(12,14,20,.10);
+}
+
+/* =============================================================================
+   3) RESET / BASE
+============================================================================= */
+*{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; }
+
+body{
+  margin: 0;
+  font-family: var(--font);
+  color: var(--text);
+
+  /* Fondo con capas (radiales + degradado) */
+  background:
+    radial-gradient(1200px 700px at 15% -10%, rgba(138,92,255,.35), transparent 60%),
+    radial-gradient(900px 600px at 90% 10%, rgba(34,193,195,.25), transparent 55%),
+    radial-gradient(800px 500px at 70% 120%, rgba(255,77,109,.15), transparent 55%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::selection{ background: rgba(138,92,255,.28); }
+
+a{ color: inherit; text-decoration: none; }
+
+img{ max-width: 100%; display: block; }
+
+button, input, textarea{ font: inherit; }
+
+textarea{ resize: vertical; }
+
+/* Scrollbar (suave) */
+*::-webkit-scrollbar{ width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.14);
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,0);
+  background-clip: padding-box;
+}
+html[data-theme="light"] *::-webkit-scrollbar-thumb{
+  background: rgba(12,14,20,.18);
+  border: 2px solid rgba(0,0,0,0);
+  background-clip: padding-box;
+}
+
+/* =============================================================================
+   4) UTILIDADES
+============================================================================= */
+.container{
+  width: min(var(--container), calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.is-hidden{ display:none !important; }
+.muted{ color: var(--muted); }
+.spacer{ height: 22px; }
+
+.btnRow{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+/* =============================================================================
+   5) FONDO DECORATIVO (BLOBS + NOISE)
+============================================================================= */
+.bg-blobs{
+  position: fixed;
+  inset: -240px;
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(42px);
+  opacity: .62;
+}
+
+.blob{
+  position: absolute;
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(138,92,255,.95), transparent 58%);
+  animation: floatA 11s ease-in-out infinite;
+}
+
+.blob.b1{ left: 4%; top: 12%; }
+
+.blob.b2{
+  width: 560px;
+  height: 560px;
+  left: 55%;
+  top: 8%;
+  background: radial-gradient(circle at 30% 30%, rgba(34,193,195,.90), transparent 58%);
+  animation: floatB 13s ease-in-out infinite;
+}
+
+/* Capa de “ruido” (textura) */
+.noise{
+  position: absolute;
+  inset: 0;
+  opacity: .22;
+  mix-blend-mode: overlay;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+/* =============================================================================
+   6) NAVBAR
+============================================================================= */
+.nav{
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid var(--border);
+
+  /* Fondo “glass” */
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.20));
+  backdrop-filter: blur(var(--blur));
+}
+html[data-theme="light"] .nav{
+  background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.45));
+}
+
+.nav__inner{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 0;
+}
+
+.brand{
+  display:inline-flex;
+  align-items:center;
+  gap: 10px;
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+.brand img{ width: 34px; height: 34px; }
+
+.nav__burger{
+  display:none;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor:pointer;
+}
+
+.nav__links{
+  display:flex;
+  gap: 12px;
+  align-items:center;
+}
+.nav__links a{
+  padding: 9px 10px;
+  border-radius: 12px;
+  color: var(--muted);
+  transition: background var(--t-fast) ease, color var(--t-fast) ease, transform var(--t-fast) ease;
+}
+.nav__links a:hover{
+  color: var(--text);
+  background: rgba(255,255,255,.08);
+  transform: translateY(-1px);
+}
+
+.nav__actions{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+
+/* =============================================================================
+   7) BOTONES / BADGES / CHIPS
+============================================================================= */
+.btn{
+  position: relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  cursor:pointer;
+
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+
+  transition: transform var(--t-fast) ease, background var(--t-fast) ease, border-color var(--t-fast) ease;
+  user-select: none;
+  overflow: hidden;
+}
+.btn:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.18);
+}
+.btn:active{ transform: translateY(0px); }
+
+.btn--primary{
+  border: 0;
+  background: linear-gradient(135deg, var(--brand), var(--brand2));
+  box-shadow: 0 18px 45px rgba(138,92,255,.18);
+}
+.btn--primary:hover{
+  filter: brightness(1.03);
+}
+
+.btn--ghost{
+  background: transparent;
+}
+
+.icon-btn{
+  width: 42px;
+  height: 42px;
+  display:grid;
+  place-items:center;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform var(--t-fast) ease, background var(--t-fast) ease;
+}
+.icon-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  font-weight: 800;
+  font-size: .86rem;
+}
+
+.badge--shine{
+  position: relative;
+  overflow: hidden;
+}
+.badge--shine::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.45), transparent 70%);
+  transform: translateX(-120%);
+  animation: shine 2.6s ease-in-out infinite;
+}
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  font-weight: 700;
+  font-size: .90rem;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-weight: 800;
+  font-size: .85rem;
+}
+.pill--soft{
+  background: rgba(255,255,255,.06);
+}
+
+/* Ripple (JS lo añade dentro del .btn) */
+.ripple{
+  position:absolute;
+  border-radius: 999px;
+  transform: scale(0);
+  background: rgba(255,255,255,.35);
+  animation: ripple 600ms ease-out;
+  pointer-events:none;
+}
+
+/* =============================================================================
+   8) CARDS
+============================================================================= */
+.card{
+  position: relative;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(var(--blur));
+}
+
+.card::before{
+  /* Borde con “brillo” suave */
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(138,92,255,.35), rgba(34,193,195,.25), rgba(255,77,109,.20));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events:none;
+  opacity: .55;
+}
+
+.card--pad{ padding: 18px; }
+
+/* =============================================================================
+   9) HERO
+============================================================================= */
+.hero{
+  padding: 52px 0 22px;
+}
+
+.hero__grid{
+  display:grid;
+  grid-template-columns: 1.25fr .9fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.hero__eyebrow{
+  margin: 0 0 10px;
+  color: var(--muted);
+  letter-spacing: .2px;
+}
+
+.hero__title{
+  margin: 0;
+  font-size: clamp(2.1rem, 3.6vw, 3.1rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.hero__subtitle{
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.hero__cta{
+  margin-top: 18px;
+  display:flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hero__statRow{
+  margin-top: 18px;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.stat{
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.04);
+  padding: 12px;
+}
+.stat b{
+  display:block;
+  font-size: 1.25rem;
+}
+.stat span{
+  display:block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: .90rem;
+}
+
+.hero__card{ padding: 18px; overflow: hidden; }
+.heroCard__top{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.heroCard__title{
+  margin: 14px 0 0;
+  font-size: 1.25rem;
+}
+.heroCard__text{
+  margin: 10px 0 0;
+  line-height: 1.65;
+}
+.heroCard__chips{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* =============================================================================
+   10) SECCIONES GENERALES
+============================================================================= */
+.section{ padding: 46px 0; }
+
+.section__head{
+  display:flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.section__title{
+  margin:0;
+  font-size: 1.7rem;
+}
+.section__desc{
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+/* =============================================================================
+   11) JUEGOS (CARDS)
+============================================================================= */
+.games{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+/* Tarjeta principal del juego */
+.gameCard{
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.04);
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--t-fast) ease, border-color var(--t-fast) ease, background var(--t-fast) ease;
+}
+
+/* Fondo y “arte” del juego */
+.gameCard__art{
+  position: relative;
+  height: 140px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--g1, var(--brand)), var(--g2, var(--brand2)));
+}
+
+/* Brillo en movimiento */
+.gameCard__art::after{
+  content:"";
+  position:absolute;
+  inset: -60px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 52%);
+  filter: blur(10px);
+  transform: translateX(-25%);
+  opacity: .55;
+  animation: artGlow 4.2s ease-in-out infinite;
+}
+
+/* Icono grande */
+.gameCard__icon{
+  position:absolute;
+  left: 16px;
+  bottom: 14px;
+  font-size: 2.1rem;
+  filter: drop-shadow(0 14px 24px rgba(0,0,0,.22));
+}
+
+/* Tag (esquina) */
+.gameCard__tag{
+  position:absolute;
+  right: 12px;
+  top: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: .78rem;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(0,0,0,.16);
+  color: rgba(255,255,255,.92);
+}
+html[data-theme="light"] .gameCard__tag{ background: rgba(255,255,255,.30); color: rgba(12,14,20,.86); }
+
+.gameCard__body{
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+}
+
+.gameCard__title{
+  margin: 0;
+  font-size: 1.18rem;
+  letter-spacing: -0.01em;
+}
+.gameCard__desc{
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: .98rem;
+}
+
+.gameCard__meta{
+  margin-top: 14px;
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pillMeta{
+  display:inline-flex;
+  gap: 8px;
+  align-items:center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.05);
+  font-weight: 700;
+  font-size: .84rem;
+  color: rgba(255,255,255,.88);
+}
+html[data-theme="light"] .pillMeta{ color: rgba(12,14,20,.82); background: rgba(255,255,255,.55); }
+
+.gameCard__actions{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gameCard:hover{
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,.22);
+  background: rgba(255,255,255,.06);
+}
+
+/* =============================================================================
+   12) FORMULARIOS
+============================================================================= */
+.form{ display:grid; gap: 12px; }
+
+.field{ display:grid; gap: 6px; }
+
+label{
+  font-weight: 800;
+  font-size: .95rem;
+}
+
+.input, textarea{
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  padding: 12px 12px;
+  outline: none;
+  transition: border-color var(--t-fast) ease, background var(--t-fast) ease, transform var(--t-fast) ease;
+}
+
+.input:focus, textarea:focus{
+  border-color: rgba(138,92,255,.55);
+  background: rgba(255,255,255,.10);
+}
+
+.help{
+  margin: 0;
+  color: var(--muted);
+  font-size: .88rem;
+  line-height: 1.45;
+}
+
+/* =============================================================================
+   13) COMENTARIOS
+============================================================================= */
+.comments{
+  display:grid;
+  gap: 12px;
+}
+
+.comment{ padding: 16px; }
+
+.comment__top{
+  display:flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items:center;
+}
+.comment__author{ font-weight: 900; }
+.comment__date{ color: var(--muted); font-size: .88rem; }
+
+.comment__text{
+  margin: 12px 0 0;
+  line-height: 1.6;
+  color: rgba(255,255,255,.88);
+}
+html[data-theme="light"] .comment__text{ color: rgba(12,14,20,.86); }
+
+/* =============================================================================
+   14) ABOUT + MAPA
+============================================================================= */
+.aboutGrid{
+  display:grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 14px;
+}
+
+.map{
+  min-height: 320px;
+  border-radius: var(--radius);
+  overflow:hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+.map iframe{ width: 100%; height: 100%; display:block; }
+
+.infoList{
+  display:grid;
+  gap: 12px;
+}
+.infoItem{
+  padding: 16px;
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.infoItem span{ color: var(--muted); }
+
+/* =============================================================================
+   15) FOOTER
+============================================================================= */
+.footer{
+  padding: 22px 0 40px;
+  border-top: 1px solid var(--border);
+  background: rgba(0,0,0,.12);
+}
+html[data-theme="light"] .footer{ background: rgba(255,255,255,.30); }
+
+.footer__inner{
+  display:flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items:center;
+}
+
+/* =============================================================================
+   16) TOASTS
+============================================================================= */
+.toastWrap{
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 999;
+  display:grid;
+  gap: 10px;
+}
+.toast{
+  width: min(360px, calc(100vw - 32px));
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(var(--blur));
+  animation: pop 180ms ease-out;
+}
+.toast b{ display:block; }
+.toast span{ display:block; margin-top: 4px; color: var(--muted); }
+
+/* =============================================================================
+   17) MODALES
+============================================================================= */
+.modal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: 18px;
+  background: rgba(0,0,0,.52);
+  backdrop-filter: blur(10px);
+  z-index: 200;
+}
+
+.modal.is-open{ display:grid; }
+
+/* Variante “juego” (más ancha) */
+.modal--game .modal__panel{
+  width: min(980px, 100%);
+  max-height: min(84vh, 780px);
+}
+
+.modal__panel{
+  width: min(560px, 100%);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.modal__panel--game{ padding: 18px; }
+
+.modal__row{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.modal__row--game{
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.gameModal__content{
+  padding-top: 14px;
+}
+
+/* =============================================================================
+   18) MINI‑JUEGOS (UI)
+============================================================================= */
+.gameWrap{
+  display:grid;
+  gap: 14px;
+}
+
+.gamePanel{
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.04);
+  padding: 14px;
+}
+
+.gameHud{
+  display:flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.hudStat{
+  display:flex;
+  gap: 8px;
+  align-items:center;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.05);
+  font-weight: 800;
+  font-size: .86rem;
+}
+
+/* ---- RPS (Piedra Papel Tijera) ---- */
+.rpsChoices{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.rpsBtn{
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  padding: 14px 10px;
+  cursor:pointer;
+  transition: transform var(--t-fast) ease, background var(--t-fast) ease, border-color var(--t-fast) ease;
+}
+.rpsBtn:hover{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.20);
+}
+.rpsBtn b{ display:block; font-size: 1.2rem; }
+.rpsBtn span{ display:block; margin-top: 6px; color: var(--muted); font-weight: 700; }
+
+/* ---- Guess (Adivina el número) ---- */
+.guessRow{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items:center;
+}
+.guessInput{
+  flex: 1;
+  min-width: 180px;
+}
+.guessHint{
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.88);
+  line-height: 1.55;
+}
+html[data-theme="light"] .guessHint{ color: rgba(12,14,20,.84); background: rgba(255,255,255,.55); }
+
+/* ---- Reaction (Reflejos) ---- */
+.reactionArea{
+  height: 220px;
+  border-radius: var(--radius);
+  border: 1px dashed rgba(255,255,255,.25);
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding: 16px;
+  background: rgba(255,255,255,.03);
+}
+.reactionArea.is-ready{
+  border-style: solid;
+  border-color: rgba(34,193,195,.55);
+  background: rgba(34,193,195,.10);
+}
+.reactionArea.is-go{
+  border-color: rgba(138,92,255,.55);
+  background: rgba(138,92,255,.12);
+}
+.reactionArea b{ font-size: 1.25rem; }
+.reactionArea p{ margin: 10px 0 0; color: var(--muted); }
+
+/* ---- Memory (Parejas) ---- */
+.memoryGrid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.memCard{
+  position: relative;
+  height: 88px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  cursor: pointer;
+  perspective: 900px;
+}
+.memInner{
+  position:absolute;
+  inset: 0;
+  border-radius: inherit;
+  transform-style: preserve-3d;
+  transition: transform var(--t-med) ease;
+}
+.memCard.is-flipped .memInner{ transform: rotateY(180deg); }
+
+.memFace{
+  position:absolute;
+  inset:0;
+  border-radius: inherit;
+  display:grid;
+  place-items:center;
+  backface-visibility: hidden;
+  font-weight: 900;
+  font-size: 1.55rem;
+}
+.memFront{
+  background: linear-gradient(135deg, rgba(138,92,255,.28), rgba(34,193,195,.18));
+}
+.memBack{
+  transform: rotateY(180deg);
+  background: rgba(0,0,0,.18);
+}
+html[data-theme="light"] .memBack{ background: rgba(255,255,255,.65); }
+
+.memCard.is-matched{
+  border-color: rgba(34,193,195,.55);
+  box-shadow: 0 0 0 1px rgba(34,193,195,.20) inset;
+}
+
+/* =============================================================================
+
+/* ---- Whack (golpea al pixel) ---- */
+.whackGrid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.whackCell{
+  position: relative;
+  height: 86px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.05);
+  cursor: pointer;
+  overflow: hidden;
+  display:grid;
+  place-items:center;
+  transition: transform var(--t-fast) ease, background var(--t-fast) ease, border-color var(--t-fast) ease;
+}
+.whackCell:hover{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.08);
+}
+.whackDot{
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.14);
+  transition: transform var(--t-fast) ease, background var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+.whackCell::after{
+  content:"";
+  position:absolute;
+  inset:-60px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.25), transparent 60%);
+  opacity: 0;
+  transition: opacity var(--t-fast) ease;
+}
+.whackCell.is-active{
+  border-color: rgba(34,193,195,.55);
+  background: rgba(34,193,195,.10);
+}
+.whackCell.is-active::after{ opacity: .65; }
+.whackCell.is-active .whackDot{
+  background: linear-gradient(135deg, var(--brand2), var(--brand));
+  box-shadow: 0 0 0 10px rgba(34,193,195,.12), 0 18px 36px rgba(34,193,195,.18);
+  transform: scale(1.35);
+  animation: whackPulse 900ms ease-in-out infinite;
+}
+
+   19) TABLAS (ADMIN)
+============================================================================= */
+.adminGrid{
+  display:grid;
+  grid-template-columns: 280px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.adminNav{
+  padding: 16px;
+  display:flex;
+  flex-direction: column;
+}
+
+.adminTip{
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.05);
+}
+
+.adminTitle{
+  margin:0;
+  font-size: 1.35rem;
+}
+
+.table{
+  width: 100%;
+  border-collapse: collapse;
+  overflow:hidden;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.table th, .table td{
+  text-align:left;
+  padding: 12px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.table thead th{
+  background: rgba(255,255,255,.06);
+  font-size: .90rem;
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.table tbody tr:hover{
+  background: rgba(255,255,255,.04);
+}
+
+.table td small{ color: var(--muted); }
+
+/* =============================================================================
+   20) AUTH (LOGIN / REGISTER / RESET)
+============================================================================= */
+.authCenter{
+  display:grid;
+  place-items:center;
+}
+
+.authCard{
+  width: min(520px, 100%);
+}
+.authCard--wide{ width: min(640px, 100%); }
+
+.authTitle{
+  margin:0;
+  font-size: 1.7rem;
+}
+
+.authLinks{
+  margin-top: 10px;
+  display:flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* =============================================================================
+   21) REVEAL (animación al entrar en pantalla)
+============================================================================= */
+.reveal{
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity var(--t-slow) ease, transform var(--t-slow) ease;
+}
+.reveal.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Respeta “reduced motion” */
+@media (prefers-reduced-motion: reduce){
+  *{ scroll-behavior: auto !important; }
+  .reveal{ opacity: 1; transform:none; transition: none; }
+  .blob, .badge--shine::after{ animation: none !important; }
+}
+
+/* =============================================================================
+   22) ANIMACIONES (keyframes)
+============================================================================= */
+@keyframes floatA{
+  0%,100%{ transform: translate(0,0) scale(1); }
+  50%{ transform: translate(30px, -20px) scale(1.06); }
+}
+@keyframes floatB{
+  0%,100%{ transform: translate(0,0) scale(1); }
+  50%{ transform: translate(-26px, 18px) scale(1.08); }
+}
+@keyframes shine{
+  0%{ transform: translateX(-120%); opacity: .0; }
+  20%{ opacity: .65; }
+  100%{ transform: translateX(120%); opacity: .0; }
+}
+@keyframes ripple{
+  to{ transform: scale(3.4); opacity: 0; }
+}
+@keyframes pop{
+  from{ transform: translateY(6px); opacity: 0; }
+  to{ transform: translateY(0); opacity: 1; }
+}
+@keyframes artGlow{
+  0%,100%{ transform: translateX(-25%); opacity: .50; }
+  50%{ transform: translateX(15%); opacity: .70; }
+}
+@keyframes whackPulse{
+  0%,100%{ transform: scale(1.35); }
+  50%{ transform: scale(1.50); }
+}
+
+
+/* =============================================================================
+   23) RESPONSIVE
+============================================================================= */
+@media (max-width: 980px){
+  .hero__grid{ grid-template-columns: 1fr; }
+  .adminGrid{ grid-template-columns: 1fr; }
+}
+
+@media (max-width: 820px){
+  .games{ grid-template-columns: repeat(2, 1fr); }
+
+  .nav__burger{ display:inline-flex; }
+  .nav__links{
+    display:none;
+    position:absolute;
+    top: 68px;
+    right: 16px;
+    left: 16px;
+    flex-direction: column;
+    padding: 12px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--card2), var(--card));
+    box-shadow: var(--shadow-soft);
+  }
+  .nav__links.is-open{ display:flex; }
+}
+
+@media (max-width: 560px){
+  .games{ grid-template-columns: 1fr; }
+  .hero__statRow{ grid-template-columns: 1fr; }
+  .memoryGrid{ grid-template-columns: repeat(3, 1fr); }
+}

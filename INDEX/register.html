@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <!-- =========================================================================
+       GameZone — Registro
+       -------------------------------------------------------------------------
+       Página para crear una cuenta.
+       - Guarda el usuario en el navegador y permite iniciar sesión.
+  ========================================================================= -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GameZone — Crear cuenta</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Fuente opcional -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script src="assets/js/app.js" defer></script>
+</head>
+
+<body data-page="register">
+
+  <!-- Fondo decorativo -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="noise"></div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="nav">
+    <div class="container nav__inner">
+      <a class="brand" href="index.html" aria-label="Ir al inicio">
+        <img src="assets/img/logo.svg" alt="Logo de GameZone" />
+        <span>GameZone</span>
+      </a>
+
+      <button class="nav__burger" data-action="toggleMenu" aria-label="Abrir/Cerrar menú">☰</button>
+
+      <nav class="nav__links" id="navLinks">
+        <a href="index.html#inicio">Inicio</a>
+        <a href="index.html#juegos">Juegos</a>
+        <a href="index.html#comentarios">Comentarios</a>
+        <a href="index.html#contacto">Contacto</a>
+        <a href="index.html#acerca">Acerca de</a>
+        <a href="admin.html" data-role="adminOnly" class="is-hidden">Administración</a>
+      </nav>
+
+      <div class="nav__actions">
+        <button class="icon-btn" data-action="toggleTheme" aria-label="Cambiar tema">
+          <span id="themeIcon">☾</span>
+        </button>
+
+        <span class="badge is-hidden" id="navUser">👤</span>
+
+        <a class="btn btn--ghost" href="login.html" data-auth="loggedOutOnly">Entrar</a>
+        <a class="btn btn--primary" href="register.html" data-auth="loggedOutOnly">Crear cuenta</a>
+        <button class="btn btn--ghost is-hidden" data-auth="loggedInOnly" data-action="logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container authCenter">
+
+      <div class="card card--pad authCard authCard--wide reveal">
+        <h1 class="authTitle">Crear cuenta</h1>
+        <p class="muted" style="margin:8px 0 0;">
+          Regístrate para comentar, guardar tus mejores marcas y acceder a tu perfil.
+        </p>
+
+        <div class="spacer"></div>
+
+        <form class="form" id="registerForm" autocomplete="on">
+          <div class="field">
+            <label for="regName">Nombre</label>
+            <input class="input" id="regName" placeholder="Tu nombre" required />
+          </div>
+
+          <div class="field">
+            <label for="regEmail">Email</label>
+            <input class="input" id="regEmail" type="email" placeholder="tu@email.com" required />
+          </div>
+
+          <div class="field">
+            <label for="regPassword">Contraseña</label>
+            <input class="input" id="regPassword" type="password" placeholder="Mínimo 6 caracteres" required />
+          </div>
+
+          <div class="field">
+            <label for="regPassword2">Repite la contraseña</label>
+            <input class="input" id="regPassword2" type="password" placeholder="Repite la contraseña" required />
+          </div>
+
+          <div class="field">
+            <label for="regRecovery">Frase de recuperación</label>
+            <input class="input" id="regRecovery" placeholder="Guárdala en un lugar seguro" required />
+            <p class="help">
+              Se usa para restablecer tu contraseña si la olvidas.
+            </p>
+          </div>
+
+          <button class="btn btn--primary" type="submit">Crear cuenta</button>
+
+          <p class="help">
+            ¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a>.
+          </p>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toastWrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Modal genérico -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__panel">
+      <div class="modal__row">
+        <h3 id="modalTitle" style="margin:0;">Confirmación</h3>
+        <button class="icon-btn" data-action="closeModal" aria-label="Cerrar">✕</button>
+      </div>
+      <p class="muted" id="modalText" style="margin:10px 0 0;">...</p>
+      <div class="spacer"></div>
+      <div class="modal__row" style="justify-content:flex-end;">
+        <button class="btn btn--ghost" id="modalCancel">Cancelar</button>
+        <button class="btn btn--primary" id="modalOk">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

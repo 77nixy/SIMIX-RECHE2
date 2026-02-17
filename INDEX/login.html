@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <!-- =========================================================================
+       GameZone — Login
+       -------------------------------------------------------------------------
+       Página para iniciar sesión.
+       - Valida credenciales y crea una sesión en el navegador.
+  ========================================================================= -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GameZone — Entrar</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Fuente opcional -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script src="assets/js/app.js" defer></script>
+</head>
+
+<body data-page="login">
+
+  <!-- Fondo decorativo -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="noise"></div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="nav">
+    <div class="container nav__inner">
+      <a class="brand" href="index.html" aria-label="Ir al inicio">
+        <img src="assets/img/logo.svg" alt="Logo de GameZone" />
+        <span>GameZone</span>
+      </a>
+
+      <button class="nav__burger" data-action="toggleMenu" aria-label="Abrir/Cerrar menú">☰</button>
+
+      <nav class="nav__links" id="navLinks">
+        <a href="index.html#inicio">Inicio</a>
+        <a href="index.html#juegos">Juegos</a>
+        <a href="index.html#comentarios">Comentarios</a>
+        <a href="index.html#contacto">Contacto</a>
+        <a href="index.html#acerca">Acerca de</a>
+        <a href="admin.html" data-role="adminOnly" class="is-hidden">Administración</a>
+      </nav>
+
+      <div class="nav__actions">
+        <button class="icon-btn" data-action="toggleTheme" aria-label="Cambiar tema">
+          <span id="themeIcon">☾</span>
+        </button>
+
+        <span class="badge is-hidden" id="navUser">👤</span>
+
+        <a class="btn btn--ghost" href="login.html" data-auth="loggedOutOnly">Entrar</a>
+        <a class="btn btn--primary" href="register.html" data-auth="loggedOutOnly">Crear cuenta</a>
+        <button class="btn btn--ghost is-hidden" data-auth="loggedInOnly" data-action="logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <main class="section">
+    <div class="container authCenter">
+
+      <div class="card card--pad authCard reveal">
+        <h1 class="authTitle">Iniciar sesión</h1>
+        <p class="muted" style="margin:8px 0 0;">
+          Accede para comentar y guardar tus mejores marcas en los mini‑juegos.
+        </p>
+
+        <div class="spacer"></div>
+
+        <form class="form" id="loginForm" autocomplete="on">
+          <div class="field">
+            <label for="loginEmail">Email</label>
+            <input class="input" id="loginEmail" type="email" placeholder="tu@email.com" required />
+          </div>
+
+          <div class="field">
+            <label for="loginPassword">Contraseña</label>
+            <input class="input" id="loginPassword" type="password" placeholder="••••••••" required />
+          </div>
+
+          <button class="btn btn--primary" type="submit">Entrar</button>
+
+          <div class="authLinks">
+            <a class="muted" href="reset.html">¿Olvidaste la contraseña?</a>
+            <a class="muted" href="register.html">Crear cuenta</a>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toastWrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Modal genérico -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__panel">
+      <div class="modal__row">
+        <h3 id="modalTitle" style="margin:0;">Confirmación</h3>
+        <button class="icon-btn" data-action="closeModal" aria-label="Cerrar">✕</button>
+      </div>
+      <p class="muted" id="modalText" style="margin:10px 0 0;">...</p>
+      <div class="spacer"></div>
+      <div class="modal__row" style="justify-content:flex-end;">
+        <button class="btn btn--ghost" id="modalCancel">Cancelar</button>
+        <button class="btn btn--primary" id="modalOk">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
