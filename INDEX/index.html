@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <!-- =========================================================================
+       GameZone — Página principal
+       -------------------------------------------------------------------------
+       Esta página contiene:
+       - Barra de navegación (arriba)
+       - Hero (portada)
+       - Sección de mini‑juegos
+       - Comentarios (con moderación)
+       - Formulario de contacto
+       - Sección “Acerca de” con mapa
+       - Pie de página
+  ========================================================================= -->
+
+  <!-- Codificación de caracteres (UTF‑8) -->
+  <meta charset="utf-8" />
+
+  <!-- Responsive: adapta el layout a móvil/tablet -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Título en la pestaña del navegador -->
+  <title>GameZone — Inicio</title>
+
+  <!-- Hoja de estilos principal -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Fuente opcional (si no hay internet, el sitio sigue funcionando con la fuente del sistema) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- JavaScript principal (defer = se ejecuta cuando el HTML ya se cargó) -->
+  <script src="assets/js/app.js" defer></script>
+</head>
+
+<!-- data-page indica a app.js qué controlador usar -->
+<body data-page="home">
+
+  <!-- Fondo decorativo (blobs animados) -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="noise"></div>
+  </div>
+
+  <!-- =========================================================================
+       NAVBAR
+  ========================================================================= -->
+  <header class="nav">
+    <div class="container nav__inner">
+      <!-- Marca (logo + nombre) -->
+      <a class="brand" href="index.html" aria-label="Ir al inicio">
+        <img src="assets/img/logo.svg" alt="Logo de GameZone" />
+        <span>GameZone</span>
+      </a>
+
+      <!-- Botón hamburguesa (solo se ve en móvil) -->
+      <button class="nav__burger" data-action="toggleMenu" aria-label="Abrir/Cerrar menú">
+        ☰
+      </button>
+
+      <!-- Links -->
+      <nav class="nav__links" id="navLinks">
+        <a href="#inicio">Inicio</a>
+        <a href="#juegos">Juegos</a>
+        <a href="#comentarios">Comentarios</a>
+        <a href="#contacto">Contacto</a>
+        <a href="#acerca">Acerca de</a>
+
+        <!-- Link visible solo si el usuario es admin (JS lo activa) -->
+        <a href="admin.html" data-role="adminOnly" class="is-hidden">Administración</a>
+      </nav>
+
+      <!-- Acciones (tema + sesión) -->
+      <div class="nav__actions">
+        <!-- Toggle del tema (oscuro/claro) -->
+        <button class="icon-btn" data-action="toggleTheme" aria-label="Cambiar tema">
+          <span id="themeIcon">☾</span>
+        </button>
+
+        <!-- Indicador de sesión (lo rellena JS si hay usuario) -->
+        <span class="badge is-hidden" id="navUser">👤</span>
+
+        <!-- Botones cuando NO hay sesión -->
+        <a class="btn btn--ghost" href="login.html" data-auth="loggedOutOnly">Entrar</a>
+        <a class="btn btn--primary" href="register.html" data-auth="loggedOutOnly">Crear cuenta</a>
+
+        <!-- Botón cuando SÍ hay sesión -->
+        <button class="btn btn--ghost is-hidden" data-auth="loggedInOnly" data-action="logout">
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       CONTENIDO PRINCIPAL
+  ========================================================================= -->
+  <main>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero" id="inicio">
+      <div class="container hero__grid">
+
+        <!-- Columna izquierda: texto -->
+        <div class="hero__copy reveal">
+          <p class="hero__eyebrow">🎮 Bienvenido a <b>GameZone</b></p>
+
+          <h1 class="hero__title">Juega, comparte y descubre.</h1>
+
+          <p class="hero__subtitle">
+            Un rincón gamer con mini‑juegos rápidos, comentarios moderados y un diseño limpio lleno de detalles.
+          </p>
+
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#juegos">Empezar a jugar</a>
+            <a class="btn btn--ghost" href="#comentarios">Escribir un comentario</a>
+          </div>
+
+          <div class="hero__statRow">
+            <div class="stat">
+              <b id="statUsers">—</b>
+              <span>Miembros</span>
+            </div>
+            <div class="stat">
+              <b id="statComments">—</b>
+              <span>Comentarios</span>
+            </div>
+            <div class="stat">
+              <b id="statBest">—</b>
+              <span>Mejor marca</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna derecha: tarjeta destacada -->
+        <div class="card hero__card reveal">
+          <div class="heroCard__top">
+            <span class="badge badge--shine">⭐ Destacado</span>
+            <span class="pill pill--soft">Mini‑juegos</span>
+          </div>
+
+          <h3 class="heroCard__title">Clásicos, pero con estilo.</h3>
+
+          <p class="muted heroCard__text">
+            Abre un juego en un click, juega desde el navegador y guarda tu mejor puntuación.
+          </p>
+
+          <div class="heroCard__chips">
+            <span class="chip">⚡ Rápidos</span>
+            <span class="chip">🧠 Retos</span>
+            <span class="chip">🎨 Estética</span>
+            <span class="chip">💬 Comunidad</span>
+          </div>
+
+          <div class="spacer"></div>
+
+          <a class="btn btn--primary" href="#juegos">Explorar juegos</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== JUEGOS ===================== -->
+    <section class="section" id="juegos">
+      <div class="container">
+        <div class="section__head reveal">
+          <div>
+            <h2 class="section__title">Mini‑juegos</h2>
+            <p class="section__desc">Juega directamente aquí: son sencillos, rápidos y adictivos.</p>
+          </div>
+          <span class="badge">✨ Juega ahora</span>
+        </div>
+
+        <!-- Grid de juegos (JS lo genera) -->
+        <div class="games" id="gamesGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===================== COMENTARIOS ===================== -->
+    <section class="section" id="comentarios">
+      <div class="container">
+        <div class="section__head reveal">
+          <div>
+            <h2 class="section__title">Comentarios</h2>
+            <p class="section__desc">
+              Comparte tu opinión. Para mantener un buen ambiente, los comentarios se revisan.
+            </p>
+          </div>
+          <span class="badge">💬 Comunidad</span>
+        </div>
+
+        <!-- Formulario de comentario -->
+        <div class="card card--pad reveal">
+          <form class="form" id="commentForm">
+            <div class="field">
+              <label for="commentText">Tu comentario</label>
+              <textarea id="commentText" placeholder="Escribe algo..." required></textarea>
+              <p class="help" id="commentHelp">Para comentar necesitas iniciar sesión.</p>
+            </div>
+
+            <div class="btnRow">
+              <button class="btn btn--primary" type="submit">Publicar</button>
+              <a class="btn btn--ghost" href="login.html" id="commentLoginBtn">Entrar</a>
+            </div>
+          </form>
+        </div>
+
+        <div class="spacer"></div>
+
+        <!-- Lista de comentarios aprobados -->
+        <div class="comments" id="commentsList"></div>
+      </div>
+    </section>
+
+    <!-- ===================== CONTACTO ===================== -->
+    <section class="section" id="contacto">
+      <div class="container">
+        <div class="section__head reveal">
+          <div>
+            <h2 class="section__title">Contacto</h2>
+            <p class="section__desc">¿Tienes una idea o sugerencia? Escríbenos.</p>
+          </div>
+          <span class="badge">📩 Soporte</span>
+        </div>
+
+        <div class="card card--pad reveal">
+          <form class="form" id="contactForm">
+            <div class="field">
+              <label for="cName">Nombre</label>
+              <input class="input" id="cName" placeholder="Tu nombre" required />
+            </div>
+
+            <div class="field">
+              <label for="cEmail">Email</label>
+              <input class="input" id="cEmail" type="email" placeholder="tu@email.com" required />
+            </div>
+
+            <div class="field">
+              <label for="cSubject">Asunto</label>
+              <input class="input" id="cSubject" placeholder="¿De qué va el mensaje?" required />
+            </div>
+
+            <div class="field">
+              <label for="cMessage">Mensaje</label>
+              <textarea id="cMessage" placeholder="Escribe tu mensaje..." required></textarea>
+            </div>
+
+            <button class="btn btn--primary" type="submit">Enviar mensaje</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ACERCA DE ===================== -->
+    <section class="section" id="acerca">
+      <div class="container">
+        <div class="section__head reveal">
+          <div>
+            <h2 class="section__title">Acerca de</h2>
+            <p class="section__desc">
+              GameZone es un espacio para descubrir mini‑juegos y compartir opiniones con la comunidad.
+            </p>
+          </div>
+          <span class="badge">🗺️ Ubicación</span>
+        </div>
+
+        <div class="aboutGrid">
+          <!-- Mapa (Google Maps embed) -->
+          <div class="map reveal">
+            <iframe
+              title="Mapa de ubicación"
+              width="100%"
+              height="100%"
+              style="border:0"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Madrid%2C%20Espa%C3%B1a&output=embed">
+            </iframe>
+          </div>
+
+          <!-- Información -->
+          <div class="infoList">
+            <div class="card infoItem reveal">
+              <b>📍 Dirección</b>
+              <span>Calle Gamer 123, Madrid</span>
+            </div>
+            <div class="card infoItem reveal">
+              <b>✉️ Email</b>
+              <span>hola@gamezone.example</span>
+            </div>
+            <div class="card infoItem reveal">
+              <b>⏰ Horario</b>
+              <span>Lunes a viernes — 10:00 a 20:00</span>
+            </div>
+            <div class="card infoItem reveal">
+              <b>🎮 Comunidad</b>
+              <span>Un lugar para jugar y conversar.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       FOOTER
+  ========================================================================= -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>© <span id="yearNow"></span> GameZone</span>
+      <span class="muted">Diseñado con cuidado ✨</span>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       TOASTS (notificaciones)
+  ========================================================================= -->
+  <div class="toastWrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- =========================================================================
+       MODAL DE CONFIRMACIÓN (genérico)
+  ========================================================================= -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__panel">
+      <div class="modal__row">
+        <h3 id="modalTitle" style="margin:0;">Confirmación</h3>
+        <button class="icon-btn" data-action="closeModal" aria-label="Cerrar">✕</button>
+      </div>
+      <p class="muted" id="modalText" style="margin:10px 0 0;">...</p>
+      <div class="spacer"></div>
+      <div class="modal__row" style="justify-content:flex-end;">
+        <button class="btn btn--ghost" id="modalCancel">Cancelar</button>
+        <button class="btn btn--primary" id="modalOk">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL DE JUEGO (contenedor donde se cargan los mini‑juegos)
+  ========================================================================= -->
+  <div class="modal modal--game" id="gameModal" aria-hidden="true">
+    <div class="modal__panel modal__panel--game">
+      <div class="modal__row modal__row--game">
+        <div>
+          <h3 id="gameTitle" style="margin:0;">Juego</h3>
+          <p class="muted" id="gameSubtitle" style="margin:6px 0 0;">—</p>
+        </div>
+        <button class="icon-btn" data-action="closeGame" aria-label="Cerrar juego">✕</button>
+      </div>
+
+      <div class="gameModal__content" id="gameContent"></div>
+    </div>
+  </div>
+
+</body>
+</html>

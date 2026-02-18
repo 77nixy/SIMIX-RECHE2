@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <!-- =========================================================================
+       GameZone — Panel de administración
+       -------------------------------------------------------------------------
+       Esta página solo es accesible para usuarios con rol "admin".
+       Permite:
+       - Gestionar usuarios (rol / borrado)
+       - Moderar comentarios (aprobar / borrar)
+       - Ver mensajes del formulario de contacto
+  ========================================================================= -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GameZone — Administración</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Fuente opcional -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script src="assets/js/app.js" defer></script>
+</head>
+
+<body data-page="admin">
+
+  <!-- Fondo decorativo -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="noise"></div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="nav">
+    <div class="container nav__inner">
+      <a class="brand" href="index.html" aria-label="Ir al inicio">
+        <img src="assets/img/logo.svg" alt="Logo de GameZone" />
+        <span>GameZone</span>
+      </a>
+
+      <button class="nav__burger" data-action="toggleMenu" aria-label="Abrir/Cerrar menú">☰</button>
+
+      <nav class="nav__links" id="navLinks">
+        <a href="index.html#inicio">Inicio</a>
+        <a href="index.html#juegos">Juegos</a>
+        <a href="index.html#comentarios">Comentarios</a>
+        <a href="index.html#contacto">Contacto</a>
+        <a href="index.html#acerca">Acerca de</a>
+        <a href="admin.html" data-role="adminOnly" class="is-hidden">Administración</a>
+      </nav>
+
+      <div class="nav__actions">
+        <button class="icon-btn" data-action="toggleTheme" aria-label="Cambiar tema">
+          <span id="themeIcon">☾</span>
+        </button>
+
+        <span class="badge is-hidden" id="navUser">👤</span>
+
+        <a class="btn btn--ghost" href="login.html" data-auth="loggedOutOnly">Entrar</a>
+        <a class="btn btn--primary" href="register.html" data-auth="loggedOutOnly">Crear cuenta</a>
+        <button class="btn btn--ghost is-hidden" data-auth="loggedInOnly" data-action="logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+
+      <div class="section__head reveal">
+        <div>
+          <h1 class="section__title" style="font-size:1.9rem;">Administración</h1>
+          <p class="section__desc">
+            Moderación de contenido y gestión de usuarios.
+          </p>
+        </div>
+        <span class="badge">🛡️ Admin</span>
+      </div>
+
+      <div class="adminGrid">
+
+        <!-- Navegación lateral -->
+        <aside class="card adminNav reveal">
+          <b>Panel</b>
+
+          <button class="btn btn--ghost" data-tab="users" style="margin-top:10px;">👥 Usuarios</button>
+          <button class="btn btn--ghost" data-tab="comments">💬 Comentarios</button>
+          <button class="btn btn--ghost" data-tab="messages">📩 Mensajes</button>
+
+          <div class="spacer"></div>
+
+          <div class="adminTip">
+            <b>Consejo</b>
+            <p class="muted" style="margin:6px 0 0;">
+              Usa las pestañas para cambiar de sección y gestionar el contenido.
+            </p>
+          </div>
+        </aside>
+
+        <!-- Contenido -->
+        <section class="reveal">
+
+          <!-- TAB: USUARIOS -->
+          <div class="card card--pad" id="tabUsers">
+            <h2 class="adminTitle">Usuarios</h2>
+            <p class="muted" style="margin:8px 0 0;">
+              Cambia roles (admin/usuario) o elimina cuentas.
+            </p>
+
+            <div class="spacer"></div>
+
+            <table class="table" aria-label="Tabla de usuarios">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="usersTbody"></tbody>
+            </table>
+          </div>
+
+          <!-- TAB: COMENTARIOS -->
+          <div class="card card--pad is-hidden" id="tabComments">
+            <h2 class="adminTitle">Comentarios</h2>
+            <p class="muted" style="margin:8px 0 0;">
+              Aprueba los comentarios pendientes o elimina los que no quieras.
+            </p>
+
+            <div class="spacer"></div>
+
+            <table class="table" aria-label="Tabla de comentarios">
+              <thead>
+                <tr>
+                  <th>Autor</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                  <th>Texto</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="commentsTbody"></tbody>
+            </table>
+          </div>
+
+          <!-- TAB: MENSAJES -->
+          <div class="card card--pad is-hidden" id="tabMessages">
+            <h2 class="adminTitle">Mensajes</h2>
+            <p class="muted" style="margin:8px 0 0;">
+              Solicitudes recibidas desde el formulario de contacto.
+            </p>
+
+            <div class="spacer"></div>
+
+            <table class="table" aria-label="Tabla de mensajes">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Asunto</th>
+                  <th>Mensaje</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody id="messagesTbody"></tbody>
+            </table>
+          </div>
+
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div class="toastWrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Modal genérico -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__panel">
+      <div class="modal__row">
+        <h3 id="modalTitle" style="margin:0;">Confirmación</h3>
+        <button class="icon-btn" data-action="closeModal" aria-label="Cerrar">✕</button>
+      </div>
+      <p class="muted" id="modalText" style="margin:10px 0 0;">...</p>
+      <div class="spacer"></div>
+      <div class="modal__row" style="justify-content:flex-end;">
+        <button class="btn btn--ghost" id="modalCancel">Cancelar</button>
+        <button class="btn btn--primary" id="modalOk">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
